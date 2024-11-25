@@ -1,4 +1,6 @@
-package org.example;
+package org.example.entity;
+
+import org.example.Utility;
 
 public class Item {
     private int id;
