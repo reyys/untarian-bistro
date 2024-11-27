@@ -17,7 +17,18 @@ public class Item {
         this.updatedAt = Utility.getCurrentTimestamp();
     }
 
-    public Item(int id, String name, double price, String description, String imageUrl, int stock, String createdAt, String updatedAt) {
+    public Item(String name, double price, String description, String imageUrl, int stock) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.stock = stock;
+        this.imageUrl = imageUrl;
+        this.createdAt = Utility.getCurrentTimestamp();
+        this.updatedAt = Utility.getCurrentTimestamp();
+    }
+
+    public Item(int id, String name, double price, String description, String imageUrl, int stock, String createdAt,
+            String updatedAt) {
         this.id = id;
         this.name = name;
         this.price = price;
