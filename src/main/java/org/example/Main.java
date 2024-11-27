@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.component.panel.AdminPanel;
+import org.example.component.panel.UserPanel;
 
 import javax.swing.*;
 
@@ -9,6 +10,8 @@ import javax.swing.*;
 public class Main {
     public static void main(String[] args) {
         System.out.println("Untarian Bistro Project!");
+
+        new UserPanel();
 
         SwingUtilities.invokeLater(() -> {
             try {
