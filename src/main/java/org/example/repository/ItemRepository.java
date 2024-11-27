@@ -15,8 +15,9 @@ public class ItemRepository implements BaseRepository<Item> {
                 "VALUES (:name, :price, :description, :imageUrl, :stock, :createdAt, :updatedAt)";
 
         try (Connection con = db.open()) {
-            con.createQuery(query).bind(item).executeUpdate();
-            return item;
+            int id = con.createQuery(query, true).bind(item).executeUpdate().getKey(Integer.class);
+
+            return findById(id);
         }
     }
 
