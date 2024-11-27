@@ -14,6 +14,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
         <dependency>
@@ -27,6 +34,12 @@
             <groupId>org.sql2o</groupId>
             <artifactId>sql2o</artifactId>
             <version>1.8.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.imagekit-developer</groupId>
+            <artifactId>imagekit-java</artifactId>
+            <version>2.0.1</version>
         </dependency>
 
     </dependencies>
