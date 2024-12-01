@@ -264,9 +264,9 @@ public class AdminPanel extends JFrame {
         System.out.println("Uploading Image: " + selectedLocalImageFile.getName());
 
         ImageKit.getInstance().setConfig(new Configuration(
-                "YOUR_PUBLIC_KEY",
-                "YOUR_PRIVATE_KEY",
-                "YOUR_URL_ENDPOINT"));
+                "public_kwlMd/3tGzJ2m9nWlDslzAl4j78=",
+                "private_rvaatW1uPU9i0iPi4JoJ9bbR+x8=",
+                "https://ik.imagekit.io/reyys"));
 
         try {
             FileCreateRequest fileCreateRequest = new FileCreateRequest(
