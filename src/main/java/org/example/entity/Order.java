@@ -2,69 +2,101 @@ package org.example.entity;
 
 import org.example.Utility;
 
+import java.util.List;
+
 public class Order {
     private int id;
-    private double total_price;
-    private int table_number;
-    private final String created_at;
-    private String updated_at;
+    private List<OrderItem> orderItems;
+    private double totalPrice;
+    private int tableNumber;
+    private final String createdAt;
+    private String updatedAt;
 
-    // Default constructor
     public Order() {
-        this.created_at = Utility.getCurrentTimestamp();
-        this.updated_at = Utility.getCurrentTimestamp();
+        this.createdAt = Utility.getCurrentTimestamp();
+        this.updatedAt = Utility.getCurrentTimestamp();
     }
 
-    // Constructor with parameters for total_price and table_number
-    public Order(double total_price, int table_number) {
-        this.total_price = total_price;
-        this.table_number = table_number;
-        this.created_at = Utility.getCurrentTimestamp();
-        this.updated_at = Utility.getCurrentTimestamp();
+    public Order(int tableNumber) {
+        this.tableNumber = tableNumber;
+        this.createdAt = Utility.getCurrentTimestamp();
+        this.updatedAt = Utility.getCurrentTimestamp();
     }
 
-    // Constructor with all fields
-    public Order(int id, double total_price, int table_number, String created_at, String updated_at) {
+    public Order(int tableNumber, List<OrderItem> orderItems) {
+        this.tableNumber = tableNumber;
+        this.orderItems = orderItems;
+        this.createdAt = Utility.getCurrentTimestamp();
+        this.updatedAt = Utility.getCurrentTimestamp();
+    }
+
+    public Order(double totalPrice, int tableNumber, List<OrderItem> orderItems) {
+        this.totalPrice = totalPrice;
+        this.tableNumber = tableNumber;
+        this.orderItems = orderItems;
+        this.createdAt = Utility.getCurrentTimestamp();
+        this.updatedAt = Utility.getCurrentTimestamp();
+    }
+
+    public Order(int id, List<OrderItem> orderItems, double totalPrice, int tableNumber, String created_at,
+                 String updated_at) {
         this.id = id;
-        this.total_price = total_price;
-        this.table_number = table_number;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
+        this.orderItems = orderItems;
+        this.totalPrice = totalPrice;
+        this.tableNumber = tableNumber;
+        this.createdAt = created_at;
+        this.updatedAt = updated_at;
     }
 
-    // Getters and setters
+    public void addOrderItem(OrderItem orderItem) {
+        this.orderItems.add(orderItem);
+        this.updatedAt = Utility.getCurrentTimestamp();
+    }
+
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
-        this.updated_at = Utility.getCurrentTimestamp();
+        this.updatedAt = Utility.getCurrentTimestamp();
     }
 
     public double getTotalPrice() {
-        return total_price;  // Adjusted to match the field name
+        return totalPrice;
     }
 
     public void setTotalPrice(double total_price) {
-        this.total_price = total_price;
-        this.updated_at = Utility.getCurrentTimestamp();
+        this.totalPrice = total_price;
+        this.updatedAt = Utility.getCurrentTimestamp();
     }
 
     public int getTableNumber() {
-        return table_number;  // Adjusted to match the field name
+        return tableNumber;
     }
 
-    public void setTableNumber(int table_number) {
-        this.table_number = table_number;
-        this.updated_at = Utility.getCurrentTimestamp();
+    public void setTableNumber(int tableNumber) {
+        this.tableNumber = tableNumber;
+        this.updatedAt = Utility.getCurrentTimestamp();
     }
 
     public String getCreatedAt() {
-        return this.created_at;  // Adjusted to match the field name
+        return this.createdAt;
     }
 
     public String getUpdatedAt() {
-        return this.updated_at;  // Adjusted to match the field name
+        return this.updatedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", orderItems=" + orderItems +
+                ", totalPrice=" + totalPrice +
+                ", tableNumber=" + tableNumber +
+                ", createdAt='" + createdAt + '\'' +
+                ", updatedAt='" + updatedAt + '\'' +
+                '}';
     }
 }
