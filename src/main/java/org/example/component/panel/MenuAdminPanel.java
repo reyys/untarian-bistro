@@ -18,8 +18,9 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 
-public class AdminPanel extends JFrame {
+public class MenuAdminPanel extends JPanel {
     private final ItemRepository itemRepository = new ItemRepository();
+
     private JTable itemsTable;
     private int selectedRow = -1;
     private JTextField nameField, priceField, stockField;
@@ -27,16 +28,11 @@ public class AdminPanel extends JFrame {
     private JLabel imagePreviewLabel;
     private File selectedLocalImageFile;
 
-    public AdminPanel() {
-        setTitle("Restaurant Admin Panel");
-        setSize(1280, 720);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public MenuAdminPanel() {
         setLayout(new BorderLayout(10, 10));
 
         createTable();
         createForm();
-
-        setVisible(true);
     }
 
     private void createTable() {
