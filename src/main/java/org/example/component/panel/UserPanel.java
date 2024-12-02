@@ -20,10 +20,12 @@ public class UserPanel extends JFrame {
     private final JTextField tableNumberField = new JTextField(10);
     private final JLabel totalPriceLabel = new JLabel("Total: Rp0");
 
-    Color backgroundColor = new Color(26,26,36);
+    Color backgroundColor = new Color(13,13,13);
     Color foregroundColor = Color.WHITE;
-    Color borderColor = new Color(75, 85, 99);
-    Color cardColor = new Color(31, 41, 55);
+    Color borderColor = new Color(31, 41, 55);
+    Color cardColor = new Color(24, 24, 24);
+    Color primaryColor = new Color(225, 177, 21);
+
 
     public UserPanel() {
         setTitle("Restaurant User Panel");
@@ -87,7 +89,7 @@ public class UserPanel extends JFrame {
         // Right Side: Menu Order (1 column)
         JPanel menuOrderPanel = new JPanel();
         menuOrderPanel.setLayout(new BorderLayout());
-        menuOrderPanel.setBackground(new Color(0, 0, 0));
+        menuOrderPanel.setBackground(backgroundColor);
         menuOrderPanel.setBorder(BorderFactory.createLineBorder(borderColor, 1));
         menuOrderPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
@@ -109,10 +111,12 @@ public class UserPanel extends JFrame {
         orderItemsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         orderItemsScrollPane.setBorder(BorderFactory.createEmptyBorder());
         menuOrderPanel.add(orderItemsScrollPane, BorderLayout.CENTER);
+        menuOrderPanel.setBorder(BorderFactory.createLineBorder(borderColor, 1));
+
 
         // Table number input panel (This will be shown above the other components)
         JPanel tablePanel = new JPanel();
-        tablePanel.setBackground(new Color(0, 0, 0));
+        tablePanel.setBackground(backgroundColor);
         tablePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         JLabel tableNumberLabel = new JLabel("Table Number: ");
         tableNumberLabel.setForeground(foregroundColor);
@@ -122,21 +126,20 @@ public class UserPanel extends JFrame {
         // Total price label
         JPanel totalPricePanel = new JPanel();
         totalPricePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        totalPricePanel.setBackground(new Color(0, 0, 0));
+        totalPricePanel.setBackground(backgroundColor);
         totalPriceLabel.setForeground(foregroundColor);
         totalPricePanel.add(totalPriceLabel);
 
 
         // Place Order button
         JButton placeOrderButton = new JButton("Place Order");
-        placeOrderButton.setBackground(new Color(0, 153, 76));
         placeOrderButton.setForeground(Color.BLACK);
         placeOrderButton.addActionListener(e -> placeOrder());
 
         // Panel for the table number, total price, and place order button
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
-        bottomPanel.setBackground(new Color(0, 0, 0));
+        bottomPanel.setBackground(backgroundColor);
 
         // Set alignment of the bottom panel to the left
         bottomPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -202,7 +205,7 @@ public class UserPanel extends JFrame {
         // Panel for title, description, and price with padding
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
-        textPanel.setBackground(new Color(31, 41, 55));
+        textPanel.setBackground(cardColor);
         textPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Title label
@@ -226,6 +229,7 @@ public class UserPanel extends JFrame {
         JButton addToCartButton = new JButton("Masukan ke cart");
         addToCartButton.setAlignmentX(Component.LEFT_ALIGNMENT);
 
+        addToCartButton.setForeground(Color.BLACK);
         addToCartButton.setMargin(new Insets(0, 0, 0, 0));
         addToCartButton.setBorderPainted(true);
         addToCartButton.setFocusPainted(false);
