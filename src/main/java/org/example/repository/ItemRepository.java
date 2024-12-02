@@ -2,7 +2,6 @@ package org.example.repository;
 
 import org.example.entity.Item;
 import org.sql2o.Connection;
-import org.sql2o.Sql2oException;
 
 import java.util.List;
 
@@ -10,6 +9,7 @@ import static org.example.repository.Database.db;
 
 public class ItemRepository implements BaseRepository<Item> {
 
+    @Override
     public Item save(Item item) {
         String query = "INSERT INTO menu" + "(name, price, description, image_url, stock, created_at, updated_at)" +
                 "VALUES (:name, :price, :description, :imageUrl, :stock, :createdAt, :updatedAt)";
@@ -21,7 +21,7 @@ public class ItemRepository implements BaseRepository<Item> {
         }
     }
 
-    // Read (Get all menu items)
+    @Override
     public List<Item> findAll() {
         String query = "SELECT * FROM menu";
 
@@ -30,7 +30,7 @@ public class ItemRepository implements BaseRepository<Item> {
         }
     }
 
-    // Read (Fetch a menu item by ID)
+    @Override
     public Item findById(int id) {
         String query = "SELECT * FROM menu WHERE id = :id";
 
@@ -39,19 +39,17 @@ public class ItemRepository implements BaseRepository<Item> {
         }
     }
 
-    // Update (Modify a menu item)
+    @Override
     public void update(Item item) {
         String query = "UPDATE menu SET name = :name, price = :price, description = :description, image_url = " +
                 ":imageUrl, stock = :stock, updated_at = :updatedAt WHERE id = :id";
 
         try (Connection con = db.open()) {
             con.createQuery(query).bind(item).executeUpdate();
-        } catch (Sql2oException e) {
-            System.out.println("Error: " + e.getMessage());
         }
     }
 
-    // Delete (Remove a menu item)
+    @Override
     public void deleteById(int id) {
         String query = "DELETE FROM menu WHERE id = :id";
 
@@ -60,7 +58,7 @@ public class ItemRepository implements BaseRepository<Item> {
         }
     }
 
-    // Get the last inserted ID
+    @Override
     public int getLastId() {
         String query = "SELECT LAST_INSERT_ID()";
 

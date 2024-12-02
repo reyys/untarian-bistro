@@ -1,7 +1,7 @@
 package org.example;
 
-import org.example.component.panel.AdminPanel;
-import org.example.component.panel.UserPanel;
+import org.example.component.frame.AdminFrame;
+import org.example.component.frame.UserFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,14 +41,14 @@ public class Main {
         JButton userButton = new JButton("User");
         userButton.addActionListener(e -> {
             frame.dispose();
-            new UserPanel();
+            new UserFrame();
         });
 
         // Admin Button
         JButton adminButton = new JButton("Admin");
         adminButton.addActionListener(e -> {
             frame.dispose();
-            new AdminPanel();
+            new AdminFrame();
         });
 
         // Add buttons to the panel
