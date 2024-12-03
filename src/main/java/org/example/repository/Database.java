@@ -9,7 +9,7 @@ public class Database {
     static final Sql2o db;
 
     static {
-        db = new Sql2o("jdbc:mysql://localhost:3306/UntarianBistro", "root", "changeme");
+        db = new Sql2o("jdbc:mysql://localhost:3306/UntarianBistro", "root", "");
         Map<String, String> colMaps = new HashMap<String, String>();
         colMaps.put("image_url", "imageUrl");
         colMaps.put("total_price", "totalPrice");

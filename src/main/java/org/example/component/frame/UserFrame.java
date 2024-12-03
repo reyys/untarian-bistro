@@ -1,5 +1,6 @@
 package org.example.component.frame;
 
+import org.example.component.theme.ColorTheme;
 import org.example.entity.Item;
 import org.example.entity.Order;
 import org.example.entity.OrderItem;
@@ -8,6 +9,7 @@ import org.example.repository.OrderItemRepository;
 import org.example.repository.OrderRepository;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.net.URL;
 import java.util.ArrayList;
@@ -24,17 +26,12 @@ public class UserFrame extends JFrame {
     private final JTextField tableNumberField = new JTextField(10);
     private final JLabel totalPriceLabel = new JLabel("Total: Rp0");
 
-    Color backgroundColor = new Color(13, 13, 13);
-    Color foregroundColor = Color.WHITE;
-    Color borderColor = new Color(31, 41, 55);
-    Color cardColor = new Color(24, 24, 24);
-    Color primaryColor = new Color(225, 177, 21);
 
     public UserFrame() {
         setTitle("Restaurant User Panel");
         setSize(1440, 770);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        getContentPane().setBackground(backgroundColor);
+        getContentPane().setBackground(ColorTheme.BACKGROUND_COLOR);
 
         // Use a dark theme for the layout
         setLayout(new GridBagLayout());
@@ -48,27 +45,27 @@ public class UserFrame extends JFrame {
         JPanel menuListPanel = new JPanel();
         menuListPanel.setLayout(new BorderLayout());
         menuListPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        menuListPanel.setBackground(backgroundColor);
+        menuListPanel.setBackground(ColorTheme.BACKGROUND_COLOR);
 
         // Heading Panel
         JPanel headingPanel = new JPanel(new BorderLayout());
-        headingPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
-        headingPanel.setBackground(backgroundColor);
+        headingPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+        headingPanel.setBackground(ColorTheme.BACKGROUND_COLOR);
 
         JLabel welcomeLabel = new JLabel("Selamat Datang, Pengguna");
-        welcomeLabel.setForeground(foregroundColor);
+        welcomeLabel.setForeground(ColorTheme.FOREGROUND_COLOR);
         headingPanel.add(welcomeLabel, BorderLayout.WEST);
 
         JLabel discoverLabel = new JLabel("Eksplor menu terpopuler kami di Untarian Bistro", SwingConstants.RIGHT);
-        discoverLabel.setForeground(Color.WHITE);
+        discoverLabel.setForeground(ColorTheme.FOREGROUND_COLOR);
         headingPanel.add(discoverLabel, BorderLayout.EAST);
 
         menuListPanel.add(headingPanel, BorderLayout.NORTH);
 
         // Scrollable List Panel
         JPanel listPanel = new JPanel();
-        listPanel.setLayout(new GridLayout(0, 3, 10, 10));
-        listPanel.setBackground(backgroundColor);
+        listPanel.setLayout(new GridLayout(0, 3, 15, 15));
+        listPanel.setBackground(ColorTheme.BACKGROUND_COLOR);
 
         // Populate menu items
         List<Item> menuItems = itemRepository.findAll();
@@ -80,33 +77,35 @@ public class UserFrame extends JFrame {
         JScrollPane scrollPane = new JScrollPane(listPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.getViewport().setBackground(backgroundColor);
+        scrollPane.getViewport().setBackground(ColorTheme.BACKGROUND_COLOR);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         menuListPanel.add(scrollPane, BorderLayout.CENTER);
+        menuListPanel.setBackground(ColorTheme.BACKGROUND_COLOR);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.gridwidth = 4;
+        gbc.gridwidth = 6;
         add(menuListPanel, gbc);
 
         // Right Side: Menu Order (1 column)
+
+        // Parent panel for menuOrderPanel
+        JPanel menuOrderParentPanel = new JPanel();
+        menuOrderParentPanel.setLayout(new BorderLayout());
+        menuOrderParentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Adding empty border to provide padding
+        menuOrderParentPanel.setBackground(ColorTheme.BACKGROUND_COLOR);
+
         JPanel menuOrderPanel = new JPanel();
         menuOrderPanel.setLayout(new BorderLayout());
-        menuOrderPanel.setBackground(backgroundColor);
-        menuOrderPanel.setBorder(BorderFactory.createLineBorder(borderColor, 1));
-        menuOrderPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        menuOrderPanel.setBackground(ColorTheme.BACKGROUND_COLOR);
 
-        JLabel orderSummaryLabel = new JLabel("Daftar Pesanan", SwingConstants.LEFT);
-        orderSummaryLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        orderSummaryLabel.setForeground(foregroundColor);
-
-        menuOrderPanel.add(orderSummaryLabel, BorderLayout.NORTH);
+        // Add menuOrderPanel to the parent panel
+        menuOrderParentPanel.add(menuOrderPanel, BorderLayout.CENTER);
 
         // Panel to render the items in the order
         orderItemsPanel.setLayout(new BoxLayout(orderItemsPanel, BoxLayout.Y_AXIS));
-        orderItemsPanel.setBackground(backgroundColor);
+        orderItemsPanel.setBackground(ColorTheme.BACKGROUND_COLOR);
 
-        // Function to update the order items
         updateOrderItemsPanel(orderItemsPanel);
 
         JScrollPane orderItemsScrollPane = new JScrollPane(orderItemsPanel);
@@ -114,22 +113,29 @@ public class UserFrame extends JFrame {
         orderItemsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         orderItemsScrollPane.setBorder(BorderFactory.createEmptyBorder());
         menuOrderPanel.add(orderItemsScrollPane, BorderLayout.CENTER);
-        menuOrderPanel.setBorder(BorderFactory.createLineBorder(borderColor, 1));
+        menuOrderPanel.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(ColorTheme.BORDER_COLOR, 1),
+                "Ringkasan Pesanan",
+                TitledBorder.LEFT,
+                TitledBorder.TOP,
+                new Font("Arial", Font.BOLD, 14),
+                ColorTheme.FOREGROUND_COLOR
+        ));
 
         // Table number input panel (This will be shown above the other components)
         JPanel tablePanel = new JPanel();
-        tablePanel.setBackground(backgroundColor);
+        tablePanel.setBackground(ColorTheme.BACKGROUND_COLOR);
         tablePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         JLabel tableNumberLabel = new JLabel("Table Number: ");
-        tableNumberLabel.setForeground(foregroundColor);
+        tableNumberLabel.setForeground(ColorTheme.FOREGROUND_COLOR);
         tablePanel.add(tableNumberLabel);
         tablePanel.add(tableNumberField);
 
         // Total price label
         JPanel totalPricePanel = new JPanel();
         totalPricePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        totalPricePanel.setBackground(backgroundColor);
-        totalPriceLabel.setForeground(foregroundColor);
+        totalPricePanel.setBackground(ColorTheme.BACKGROUND_COLOR);
+        totalPriceLabel.setForeground(ColorTheme.FOREGROUND_COLOR);
         totalPricePanel.add(totalPriceLabel);
 
         // Place Order button
@@ -140,7 +146,9 @@ public class UserFrame extends JFrame {
         // Panel for the table number, total price, and place order button
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
-        bottomPanel.setBackground(backgroundColor);
+        bottomPanel.setBackground(ColorTheme.BACKGROUND_COLOR);
+        bottomPanel.setBorder(BorderFactory.createEmptyBorder(10,10,20,10));
+
 
         // Set alignment of the bottom panel to the left
         bottomPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -161,9 +169,9 @@ public class UserFrame extends JFrame {
         menuOrderPanel.add(bottomPanel, BorderLayout.SOUTH);
 
         // Add menuOrderPanel to the main layout
-        gbc.gridx = 4;
+        gbc.gridx = 6;
         gbc.gridwidth = 1;
-        add(menuOrderPanel, gbc);
+        add(menuOrderParentPanel, gbc);
 
         setVisible(true);
     }
@@ -172,8 +180,8 @@ public class UserFrame extends JFrame {
         // Create the card panel
         JPanel card = new JPanel();
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
-        card.setBackground(cardColor);
-        card.setBorder(BorderFactory.createLineBorder(borderColor, 1));
+        card.setBackground(ColorTheme.CARD_COLOR);
+        card.setBorder(BorderFactory.createLineBorder(ColorTheme.BORDER_COLOR, 1));
         card.setPreferredSize(new Dimension(0, 0));
 
         // Image with 100% width of the card
@@ -204,26 +212,26 @@ public class UserFrame extends JFrame {
         // Panel for title, description, and price with padding
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
-        textPanel.setBackground(cardColor);
+        textPanel.setBackground(ColorTheme.CARD_COLOR);
         textPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Title label
         JLabel titleLabel = new JLabel(item.getName());
         titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setForeground(ColorTheme.FOREGROUND_COLOR);
 
         // Description label
         JLabel descriptionLabel = new JLabel(item.getDescription());
         descriptionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         descriptionLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-        descriptionLabel.setForeground(Color.WHITE);
+        descriptionLabel.setForeground(ColorTheme.FOREGROUND_COLOR);
 
         // Price label
-        JLabel priceLabel = new JLabel("Rp" + item.getPrice());
+        JLabel priceLabel = new JLabel("Rp " + item.getPrice());
         priceLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         priceLabel.setFont(new Font("Arial", Font.BOLD, 12));
-        priceLabel.setForeground(Color.WHITE);
+        priceLabel.setForeground(ColorTheme.FOREGROUND_COLOR);
 
         JButton addToCartButton = new JButton("Masukan ke cart");
         addToCartButton.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -249,6 +257,7 @@ public class UserFrame extends JFrame {
         textPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Spacer
         textPanel.add(descriptionLabel);
         textPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Spacer
+
         textPanel.add(priceLabel);
         textPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Spacer
         textPanel.add(addToCartButton);
@@ -289,11 +298,11 @@ public class UserFrame extends JFrame {
         for (Item item : items) {
             JPanel itemPanel = new JPanel();
             itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
-            itemPanel.setBackground(new Color(31, 41, 55));
+            itemPanel.setBackground(ColorTheme.BACKGROUND_COLOR);
             itemPanel.setPreferredSize(new Dimension(0, 150));
 
             // Adding padding inside the itemPanel
-            itemPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            itemPanel.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
 
             JLabel itemName = new JLabel(item.getName());
             itemName.setFont(new Font("Arial", Font.BOLD, 14));
@@ -309,9 +318,9 @@ public class UserFrame extends JFrame {
 
             // Adding the elements to the itemPanel
             itemPanel.add(itemName);
-            itemPanel.add(Box.createRigidArea(new Dimension(0, 5))); // Spacer between title and description
+            itemPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Spacer between title and description
             itemPanel.add(itemDescription);
-            itemPanel.add(Box.createRigidArea(new Dimension(0, 5))); // Spacer between description and price
+            itemPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Spacer between description and price
             itemPanel.add(itemPrice);
 
             // Divider for separation between items
@@ -319,6 +328,13 @@ public class UserFrame extends JFrame {
 
             // Add the item panel to the order items panel
             orderItemsPanel.add(itemPanel);
+
+            // Create a panel to act as the divider
+            JPanel divider = new JPanel();
+            divider.setPreferredSize(new Dimension(0, 1));  // Set height to 1px
+            divider.setBackground(Color.GRAY);  // Set background to gray
+
+            orderItemsPanel.add(divider);
 
             // Add margin between item panels (similar to margin-top in Tailwind)
             orderItemsPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Spacer between each itemPanel
@@ -363,5 +379,9 @@ public class UserFrame extends JFrame {
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Invalid table number. Please enter a valid number.");
         }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(UserFrame::new);
     }
 }
