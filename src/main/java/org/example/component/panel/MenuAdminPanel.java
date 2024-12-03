@@ -4,6 +4,7 @@ import io.imagekit.sdk.ImageKit;
 import io.imagekit.sdk.config.Configuration;
 import io.imagekit.sdk.models.FileCreateRequest;
 import io.imagekit.sdk.models.results.Result;
+import org.example.component.DarkTable;
 import org.example.component.theme.ColorTheme;
 import org.example.entity.Item;
 import org.example.repository.ItemRepository;
@@ -31,11 +32,11 @@ public class MenuAdminPanel extends JPanel {
 
     public MenuAdminPanel() {
         setLayout(new BorderLayout(10, 10));
+        setBackground(ColorTheme.BACKGROUND_COLOR);
+        setForeground(ColorTheme.FOREGROUND_COLOR);
         createTable();
         createForm();
     }
-
-
 
     private void createTable() {
         String[] columnNames = {"ID", "Name", "Price", "Description", "Image URL", "Stock", "Created At",
@@ -48,9 +49,7 @@ public class MenuAdminPanel extends JPanel {
             }
         };
 
-        itemsTable = new JTable(tableModel);
-        itemsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        itemsTable.getTableHeader().setReorderingAllowed(false);
+        itemsTable = new DarkTable(tableModel);
         itemsTable.getSelectionModel().addListSelectionListener(event -> {
             if (!event.getValueIsAdjusting() && itemsTable.getSelectedRow() != -1) {
                 selectedRow = itemsTable.getSelectedRow();
@@ -96,6 +95,9 @@ public class MenuAdminPanel extends JPanel {
 
     private void createForm() {
         JPanel formPanel = new JPanel(new GridBagLayout());
+        formPanel.setBackground(ColorTheme.BACKGROUND_COLOR);
+        formPanel.setForeground(ColorTheme.FOREGROUND_COLOR);
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -103,7 +105,9 @@ public class MenuAdminPanel extends JPanel {
         // Name field
         gbc.gridx = 0;
         gbc.gridy = 0;
-        formPanel.add(new JLabel("Name:"), gbc);
+        JLabel nameLabel = new JLabel("Name:");
+        nameLabel.setForeground(ColorTheme.FOREGROUND_COLOR);
+        formPanel.add(nameLabel, gbc);
         gbc.gridx = 1;
         nameField = new JTextField(20);
         formPanel.add(nameField, gbc);
@@ -111,7 +115,9 @@ public class MenuAdminPanel extends JPanel {
         // Price field
         gbc.gridx = 0;
         gbc.gridy = 1;
-        formPanel.add(new JLabel("Price:"), gbc);
+        JLabel priceLabel = new JLabel("Price:");
+        priceLabel.setForeground(ColorTheme.FOREGROUND_COLOR);
+        formPanel.add(priceLabel, gbc);
         gbc.gridx = 1;
         priceField = new JTextField(20);
         formPanel.add(priceField, gbc);
@@ -119,7 +125,9 @@ public class MenuAdminPanel extends JPanel {
         // Description field
         gbc.gridx = 0;
         gbc.gridy = 2;
-        formPanel.add(new JLabel("Description:"), gbc);
+        JLabel descriptionLabel = new JLabel("Description:");
+        descriptionLabel.setForeground(ColorTheme.FOREGROUND_COLOR);
+        formPanel.add(descriptionLabel, gbc);
         gbc.gridx = 1;
         descriptionArea = new JTextArea(5, 20); // 5 rows, 20 columns
         descriptionArea.setLineWrap(true);
@@ -131,7 +139,9 @@ public class MenuAdminPanel extends JPanel {
         // Stock field
         gbc.gridx = 0;
         gbc.gridy = 3;
-        formPanel.add(new JLabel("Stock:"), gbc);
+        JLabel stockLabel = new JLabel("Stock:");
+        stockLabel.setForeground(ColorTheme.FOREGROUND_COLOR);
+        formPanel.add(stockLabel, gbc);
         gbc.gridx = 1;
         stockField = new JTextField(20);
         formPanel.add(stockField, gbc);
@@ -149,13 +159,16 @@ public class MenuAdminPanel extends JPanel {
         imagePreviewLabel = new JLabel();
         imagePreviewLabel.setPreferredSize(new Dimension(200, 200));
         imagePreviewLabel.setVerticalAlignment(SwingConstants.TOP);
-        imagePreviewLabel.setBackground(Color.red);
+        imagePreviewLabel.setBackground(ColorTheme.BACKGROUND_COLOR);
+        imagePreviewLabel.setForeground(ColorTheme.FOREGROUND_COLOR);
         formPanel.add(imagePreviewLabel, gbc);
 
         // Button panel
         JPanel buttonPanel = getButtonPanel();
 
         JPanel leftPanel = new JPanel(new BorderLayout());
+        leftPanel.setBackground(ColorTheme.BACKGROUND_COLOR);
+        leftPanel.setForeground(ColorTheme.FOREGROUND_COLOR);
         leftPanel.add(formPanel, BorderLayout.NORTH);
         leftPanel.add(buttonPanel, BorderLayout.SOUTH);
 
@@ -164,6 +177,8 @@ public class MenuAdminPanel extends JPanel {
 
     private JPanel getButtonPanel() {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        buttonPanel.setBackground(ColorTheme.BACKGROUND_COLOR);
+        buttonPanel.setForeground(ColorTheme.FOREGROUND_COLOR);
 
         JButton clearButton = new JButton("Clear");
         clearButton.addActionListener(_ -> clearForm());
