@@ -1,33 +1,36 @@
-package org.example.component.panel;
+package org.example.component.frame;
 
 import org.example.entity.Item;
 import org.example.entity.Order;
+import org.example.entity.OrderItem;
 import org.example.repository.ItemRepository;
+import org.example.repository.OrderItemRepository;
 import org.example.repository.OrderRepository;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserPanel extends JFrame {
+public class UserFrame extends JFrame {
 
-    private final OrderRepository orderRepository = new OrderRepository(); // Order repository for saving orders
+    private final OrderRepository orderRepository = new OrderRepository();
+    private final OrderItemRepository orderItemRepository = new OrderItemRepository();
     private final ItemRepository itemRepository = new ItemRepository();
-    private final List<Item> orderItems = new ArrayList<>();
+    private final List<OrderItem> orderItems = new ArrayList<>();
     private final JPanel orderItemsPanel = new JPanel();
 
     private final JTextField tableNumberField = new JTextField(10);
     private final JLabel totalPriceLabel = new JLabel("Total: Rp0");
 
-    Color backgroundColor = new Color(13,13,13);
+    Color backgroundColor = new Color(13, 13, 13);
     Color foregroundColor = Color.WHITE;
     Color borderColor = new Color(31, 41, 55);
     Color cardColor = new Color(24, 24, 24);
     Color primaryColor = new Color(225, 177, 21);
 
-
-    public UserPanel() {
+    public UserFrame() {
         setTitle("Restaurant User Panel");
         setSize(1440, 770);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -113,7 +116,6 @@ public class UserPanel extends JFrame {
         menuOrderPanel.add(orderItemsScrollPane, BorderLayout.CENTER);
         menuOrderPanel.setBorder(BorderFactory.createLineBorder(borderColor, 1));
 
-
         // Table number input panel (This will be shown above the other components)
         JPanel tablePanel = new JPanel();
         tablePanel.setBackground(backgroundColor);
@@ -129,7 +131,6 @@ public class UserPanel extends JFrame {
         totalPricePanel.setBackground(backgroundColor);
         totalPriceLabel.setForeground(foregroundColor);
         totalPricePanel.add(totalPriceLabel);
-
 
         // Place Order button
         JButton placeOrderButton = new JButton("Place Order");
@@ -159,12 +160,10 @@ public class UserPanel extends JFrame {
         // Add the bottom panel to the menu order panel
         menuOrderPanel.add(bottomPanel, BorderLayout.SOUTH);
 
-
         // Add menuOrderPanel to the main layout
         gbc.gridx = 4;
         gbc.gridwidth = 1;
         add(menuOrderPanel, gbc);
-
 
         setVisible(true);
     }
@@ -180,7 +179,7 @@ public class UserPanel extends JFrame {
         // Image with 100% width of the card
         ImageIcon imageIcon;
         try {
-            java.net.URL url = new java.net.URL(item.getImageUrl());
+            URL url = new URL(item.getImageUrl());
             imageIcon = new ImageIcon(url);
             Image image = imageIcon.getImage();
             Image scaledImage = image.getScaledInstance(350, 200, Image.SCALE_SMOOTH);
@@ -235,18 +234,15 @@ public class UserPanel extends JFrame {
         addToCartButton.setFocusPainted(false);
 
         // Add action listener to the button
-        addToCartButton.addActionListener(e -> {
-            orderItems.add(item);
+        addToCartButton.addActionListener(_ -> {
+            OrderItem orderItem = new OrderItem(0, item.getId());
+            orderItems.add(orderItem);
             JOptionPane.showMessageDialog(this, item.getName() + " added to cart");
-            System.out.println(orderItems);
 
             // Update the order items panel after adding the item to the cart
             updateOrderItemsPanel(orderItemsPanel);
             recalculateTotalPrice();
-
         });
-
-
 
         // Add title, description, and price to the text panel
         textPanel.add(titleLabel);
@@ -266,18 +262,31 @@ public class UserPanel extends JFrame {
     }
 
     private void recalculateTotalPrice() {
-        int totalPrice = 0;
-        for (Item item : orderItems) {
-            totalPrice += item.getPrice();
+        double total = 0;
+        for (OrderItem orderItem : orderItems) {
+            Item item = itemRepository.findById(orderItem.getItemId());
+            total += item.getPrice();
         }
-        totalPriceLabel.setText("Total: Rp" + totalPrice);
+        totalPriceLabel.setText("Total: Rp" + total);
+    }
+
+    private double calculateTotalPrice() {
+        double total = 0;
+        for (OrderItem orderItem : orderItems) {
+            Item item = itemRepository.findById(orderItem.getItemId());
+            total += item.getPrice();
+        }
+        return total;
     }
 
     // Update the Order Items panel
     private void updateOrderItemsPanel(JPanel orderItemsPanel) {
         orderItemsPanel.removeAll(); // Clear the current items in the panel
 
-        for (Item item : orderItems) {
+        List<Item> items = new ArrayList<>();
+        orderItems.forEach(orderItem -> items.add(itemRepository.findById(orderItem.getItemId())));
+
+        for (Item item : items) {
             JPanel itemPanel = new JPanel();
             itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
             itemPanel.setBackground(new Color(31, 41, 55));
@@ -320,17 +329,6 @@ public class UserPanel extends JFrame {
         orderItemsPanel.repaint();
     }
 
-
-    // Method to calculate the total price
-    private double calculateTotalPrice() {
-        double total = 0;
-        for (Item item : orderItems) {
-            total += item.getPrice(); // Sum the price of each item
-        }
-        return total;
-    }
-
-    // Method to handle placing the order
     private void placeOrder() {
         // Get the table number from the input field
         String tableNumberText = tableNumberField.getText().trim();
@@ -341,14 +339,19 @@ public class UserPanel extends JFrame {
 
         try {
             int tableNumber = Integer.parseInt(tableNumberText);
-
-            // Calculate total price based on selected items
             double totalPrice = calculateTotalPrice();
             totalPriceLabel.setText("Total: Rp" + totalPrice);
 
-            // Create an Order object and save it to the repository
-            Order order = new Order(totalPrice, tableNumber);
-            orderRepository.save(order); // Assuming OrderRepository has a save method
+            // Create an Order object
+            Order order = new Order(totalPrice, tableNumber, orderItems);
+            // Save the order
+            order = orderRepository.save(order);
+
+            // Save the order items
+            for (OrderItem orderItem : orderItems) {
+                orderItem.setOrderId(order.getId());
+                orderItemRepository.save(orderItem);
+            }
 
             JOptionPane.showMessageDialog(this, "Order placed successfully!");
 
@@ -356,8 +359,7 @@ public class UserPanel extends JFrame {
             orderItems.clear();
             updateOrderItemsPanel(orderItemsPanel);
             totalPriceLabel.setText("Total: Rp0");
-            tableNumberField.setText(""); // Clear the table number field
-
+            tableNumberField.setText("");
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Invalid table number. Please enter a valid number.");
         }
