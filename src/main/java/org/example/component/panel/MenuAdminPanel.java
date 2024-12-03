@@ -4,6 +4,7 @@ import io.imagekit.sdk.ImageKit;
 import io.imagekit.sdk.config.Configuration;
 import io.imagekit.sdk.models.FileCreateRequest;
 import io.imagekit.sdk.models.results.Result;
+import org.example.component.theme.ColorTheme;
 import org.example.entity.Item;
 import org.example.repository.ItemRepository;
 
@@ -30,10 +31,11 @@ public class MenuAdminPanel extends JPanel {
 
     public MenuAdminPanel() {
         setLayout(new BorderLayout(10, 10));
-
         createTable();
         createForm();
     }
+
+
 
     private void createTable() {
         String[] columnNames = {"ID", "Name", "Price", "Description", "Image URL", "Stock", "Created At",

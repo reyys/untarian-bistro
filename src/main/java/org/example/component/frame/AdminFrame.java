@@ -2,6 +2,7 @@ package org.example.component.frame;
 
 import org.example.component.panel.MenuAdminPanel;
 import org.example.component.panel.OrderAdminPanel;
+import org.example.component.theme.ColorTheme;
 
 import javax.swing.*;
 
@@ -14,6 +15,9 @@ public class AdminFrame extends JFrame {
 
         // Create a JTabbedPane
         JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.setBackground(ColorTheme.BACKGROUND_COLOR);
+        tabbedPane.setForeground(ColorTheme.FOREGROUND_COLOR);
+
 
         // Add the MenuAdminPanel
         MenuAdminPanel menuAdminPanel = new MenuAdminPanel();
@@ -27,5 +31,9 @@ public class AdminFrame extends JFrame {
         add(tabbedPane);
 
         setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(UserFrame::new);
     }
 }
