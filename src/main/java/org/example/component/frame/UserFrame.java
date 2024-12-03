@@ -92,7 +92,7 @@ public class UserFrame extends JFrame {
         // Parent panel for menuOrderPanel
         JPanel menuOrderParentPanel = new JPanel();
         menuOrderParentPanel.setLayout(new BorderLayout());
-        menuOrderParentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Adding empty border to provide padding
+        menuOrderParentPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 20)); // Adding empty border to provide padding
         menuOrderParentPanel.setBackground(ColorTheme.BACKGROUND_COLOR);
 
         JPanel menuOrderPanel = new JPanel();
@@ -114,7 +114,7 @@ public class UserFrame extends JFrame {
         orderItemsScrollPane.setBorder(BorderFactory.createEmptyBorder());
         menuOrderPanel.add(orderItemsScrollPane, BorderLayout.CENTER);
         menuOrderPanel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(ColorTheme.BORDER_COLOR, 1),
+                BorderFactory.createLineBorder(Color.DARK_GRAY, 1),
                 "Ringkasan Pesanan",
                 TitledBorder.LEFT,
                 TitledBorder.TOP,
@@ -160,7 +160,7 @@ public class UserFrame extends JFrame {
 
         // Add components to the bottom panel
         bottomPanel.add(tablePanel);
-        bottomPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Spacer
+        bottomPanel.add(Box.createRigidArea(new Dimension(0, 5))); // Spacer
         bottomPanel.add(totalPricePanel);
         bottomPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Spacer
         bottomPanel.add(placeOrderButton);
@@ -245,7 +245,7 @@ public class UserFrame extends JFrame {
         addToCartButton.addActionListener(_ -> {
             OrderItem orderItem = new OrderItem(0, item.getId());
             orderItems.add(orderItem);
-            JOptionPane.showMessageDialog(this, item.getName() + " added to cart");
+            JOptionPane.showMessageDialog(this, item.getName() + " dimasukkan ke keranjang");
 
             // Update the order items panel after adding the item to the cart
             updateOrderItemsPanel(orderItemsPanel);
@@ -295,14 +295,20 @@ public class UserFrame extends JFrame {
         List<Item> items = new ArrayList<>();
         orderItems.forEach(orderItem -> items.add(itemRepository.findById(orderItem.getItemId())));
 
-        for (Item item : items) {
+
+        for (int i = 0; i < items.size(); i++) {
+            Item item = items.get(i);
             JPanel itemPanel = new JPanel();
             itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
             itemPanel.setBackground(ColorTheme.BACKGROUND_COLOR);
             itemPanel.setPreferredSize(new Dimension(0, 150));
 
-            // Adding padding inside the itemPanel
-            itemPanel.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
+            // Apply padding inside the itemPanel, with 5px top padding for the first item
+            if (i == 0) {
+                itemPanel.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
+            } else {
+                itemPanel.setBorder(BorderFactory.createEmptyBorder(5, 15, 10, 15));
+            }
 
             JLabel itemName = new JLabel(item.getName());
             itemName.setFont(new Font("Arial", Font.BOLD, 14));
@@ -316,40 +322,52 @@ public class UserFrame extends JFrame {
             itemPrice.setFont(new Font("Arial", Font.BOLD, 12));
             itemPrice.setForeground(Color.WHITE);
 
-            // Adding the elements to the itemPanel
+            // Create the Remove button
+            JButton removeButton = new JButton("Hapus");
+            removeButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+            removeButton.setForeground(Color.BLACK);
+            removeButton.setMargin(new Insets(0, 0, 0, 0));
+            removeButton.setBorderPainted(true);
+            removeButton.setFocusPainted(false);
+            removeButton.addActionListener(e -> {
+                removeItemFromOrder(item);
+                updateOrderItemsPanel(orderItemsPanel);
+                recalculateTotalPrice();
+            });
+
+            // Add the Remove button to the item panel
             itemPanel.add(itemName);
-            itemPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Spacer between title and description
+            itemPanel.add(Box.createRigidArea(new Dimension(0, 5))); // Spacer
             itemPanel.add(itemDescription);
-            itemPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Spacer between description and price
+            itemPanel.add(Box.createRigidArea(new Dimension(0, 5))); // Spacer
             itemPanel.add(itemPrice);
+            itemPanel.add(Box.createRigidArea(new Dimension(0, 5))); // Spacer
+            itemPanel.add(removeButton);
 
-            // Divider for separation between items
-            itemPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Spacer between items
-
-            // Add the item panel to the order items panel
+            // Add the itemPanel to the orderItemsPanel
             orderItemsPanel.add(itemPanel);
 
-            // Create a panel to act as the divider
-            JPanel divider = new JPanel();
-            divider.setPreferredSize(new Dimension(0, 1));  // Set height to 1px
-            divider.setBackground(Color.GRAY);  // Set background to gray
-
-            orderItemsPanel.add(divider);
-
-            // Add margin between item panels (similar to margin-top in Tailwind)
-            orderItemsPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Spacer between each itemPanel
+            // Add a separator (divider) below each item with a custom color
+            JSeparator separator = new JSeparator();
+            separator.setSize(new Dimension(orderItemsPanel.getWidth(), 1));
+            separator.setForeground(Color.DARK_GRAY);
+            orderItemsPanel.add(separator);
         }
 
-        // Refresh the panel to show the updates
         orderItemsPanel.revalidate();
         orderItemsPanel.repaint();
+    }
+
+    private void removeItemFromOrder(Item item) {
+        // Find the corresponding orderItem and remove it
+        orderItems.removeIf(orderItem -> orderItem.getItemId() == item.getId());
     }
 
     private void placeOrder() {
         // Get the table number from the input field
         String tableNumberText = tableNumberField.getText().trim();
         if (tableNumberText.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter a table number.");
+            JOptionPane.showMessageDialog(this, "Masukkan nomor mejamu.");
             return;
         }
 
@@ -369,7 +387,7 @@ public class UserFrame extends JFrame {
                 orderItemRepository.save(orderItem);
             }
 
-            JOptionPane.showMessageDialog(this, "Order placed successfully!");
+            JOptionPane.showMessageDialog(this, "Order telah masuk!");
 
             // Reset the order
             orderItems.clear();
