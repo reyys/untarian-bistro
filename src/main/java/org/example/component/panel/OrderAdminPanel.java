@@ -1,5 +1,7 @@
 package org.example.component.panel;
 
+import org.example.component.DarkTable;
+import org.example.component.theme.ColorTheme;
 import org.example.entity.Item;
 import org.example.entity.Order;
 import org.example.entity.OrderItem;
@@ -38,8 +40,8 @@ public class OrderAdminPanel extends JPanel {
                 return false;
             }
         };
-        ordersTable = new JTable(ordersTableModel);
-        ordersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        ordersTable = new DarkTable(ordersTableModel);
         ordersTable.getSelectionModel().addListSelectionListener(event -> {
             if (!event.getValueIsAdjusting() && ordersTable.getSelectedRow() != -1) {
                 int selectedRow = ordersTable.getSelectedRow();
@@ -59,8 +61,8 @@ public class OrderAdminPanel extends JPanel {
                 return false;
             }
         };
-        orderItemsTable = new JTable(orderItemsTableModel);
-        orderItemsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        orderItemsTable = new DarkTable(orderItemsTableModel);
         orderItemsTable.getSelectionModel().addListSelectionListener(event -> {
             if (!event.getValueIsAdjusting() && orderItemsTable.getSelectedRow() != -1) {
                 int selectedRow = orderItemsTable.getSelectedRow();
@@ -74,13 +76,28 @@ public class OrderAdminPanel extends JPanel {
 
         // Item details panel
         JPanel itemDetailsPanel = new JPanel();
+        itemDetailsPanel.setPreferredSize(new Dimension(300, 0));
+        itemDetailsPanel.setBackground(ColorTheme.CARD_COLOR);
+        itemDetailsPanel.setForeground(ColorTheme.FOREGROUND_COLOR);
         itemDetailsPanel.setLayout(new BoxLayout(itemDetailsPanel, BoxLayout.Y_AXIS));
         itemDetailsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         itemIdLabel = new JLabel();
+        itemIdLabel.setForeground(ColorTheme.FOREGROUND_COLOR);
+        itemIdLabel.setBackground(ColorTheme.BACKGROUND_COLOR);
+
         itemNameLabel = new JLabel();
+        itemNameLabel.setForeground(ColorTheme.FOREGROUND_COLOR);
+        itemNameLabel.setBackground(ColorTheme.BACKGROUND_COLOR);
+
         itemDescriptionLabel = new JLabel();
+        itemDescriptionLabel.setForeground(ColorTheme.FOREGROUND_COLOR);
+        itemDescriptionLabel.setBackground(ColorTheme.BACKGROUND_COLOR);
+
         itemPriceLabel = new JLabel();
+        itemPriceLabel.setForeground(ColorTheme.FOREGROUND_COLOR);
+        itemPriceLabel.setBackground(ColorTheme.BACKGROUND_COLOR);
+
         itemImageLabel = new JLabel();
 
         itemDetailsPanel.add(itemIdLabel);
