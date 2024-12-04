@@ -51,6 +51,10 @@ public class ItemRepository implements BaseRepository<Item> {
 
     @Override
     public void deleteById(int id) {
+        if (orderItemRepository.isItemInOrder(id)) {
+            throw new IllegalStateException("Cannot delete item. It is part of an existing order.");
+        }
+
         String query = "DELETE FROM menu WHERE id = :id";
 
         try (Connection con = db.open()) {
