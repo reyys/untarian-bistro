@@ -301,7 +301,12 @@ public class MenuAdminPanel extends JPanel {
         }
 
         int id = (int) itemsTable.getValueAt(selectedRow, 0);
-        itemRepository.deleteById(id);
+        try {
+            itemRepository.deleteById(id);
+        } catch (IllegalStateException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         refreshTable();
         clearForm();
