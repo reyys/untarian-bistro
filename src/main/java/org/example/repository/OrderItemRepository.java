@@ -34,6 +34,17 @@ public class OrderItemRepository implements BaseRepository<OrderItem> {
         }
     }
 
+    public boolean isItemInOrder(int itemId) {
+        String query = "SELECT COUNT(*) FROM order_items WHERE item_id = :itemId";
+
+        try (Connection con = db.open()) {
+            int count = con.createQuery(query)
+                    .addParameter("itemId", itemId)
+                    .executeScalar(Integer.class);
+            return count > 0;
+        }
+    }
+
     @Override
     public List<OrderItem> findAll() {
         String query = "SELECT * FROM order_items";

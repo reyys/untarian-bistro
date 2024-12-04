@@ -9,6 +9,8 @@ import static org.example.repository.Database.db;
 
 public class ItemRepository implements BaseRepository<Item> {
 
+    private final OrderItemRepository orderItemRepository = new OrderItemRepository();
+
     @Override
     public Item save(Item item) {
         String query = "INSERT INTO menu" + "(name, price, description, image_url, stock, created_at, updated_at)" +
